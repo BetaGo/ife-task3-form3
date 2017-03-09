@@ -111,11 +111,13 @@
     <div id="in_school">
       <span class="location-title">学校</span
       ><select name="city" id="city" class="select select-city">
-        <option value="北京">北京</option>
+        <option value="北京" selected >北京</option>
         <option value="上海">上海</option>
+        <option value="河南">河南</option>
       </select
       ><select name="school" id="school" class="select select-school">
         <option value="北京大学">北京大学</option>
+        <option value="北京大学">清华大学</option>
       </select>
     </div>
     <div id="out_school" class="hide">
@@ -125,7 +127,8 @@
   </form>
 
   <script>
-    var $ = function(selector,context) {
+    (function() {
+      var $ = function(selector,context) {
       var context = context || document;
       return context.querySelector(selector);
     };
@@ -133,9 +136,11 @@
     var isStudent = $('label[for="is_student"'),
       notStudent = $('label[for="not_student"'),
       inSchool = $('#in_school'),
-      outSchool = $('#out_school');
+      outSchool = $('#out_school'),
+      city = $('#city'),
+      school = $('#school');
 
-
+    // 在校生 与 非在校生切换
     isStudent.addEventListener('click',function(){
       notStudent.classList.add('input-label-unselect');
       notStudent.classList.remove('input-label-select');
@@ -143,7 +148,7 @@
       isStudent.classList.add('input-label-select');
       inSchool.classList.remove('hide');
       outSchool.classList.add('hide');
-    });
+    },false);
 
     notStudent.addEventListener('click',function(){
       isStudent.classList.add('input-label-unselect');
@@ -152,8 +157,22 @@
       notStudent.classList.add('input-label-select');
       outSchool.classList.remove('hide');
       inSchool.classList.add('hide');
-    });
+    },false);
 
+    // 切换城市后 更换可选学校。
+    city.addEventListener('change',function(){
+      switch (city.value) {
+        case '上海':
+          school.innerHTML = '<option value="上海大学">上海大学</option><option value="上海交通大学">上海交通大学</option>';
+          break;
+        case '河南':
+          school.innerHTML = '<option value="郑州大学">郑州大学</option><option value="河南大学">河南大学</option>';
+          break;
+        default:
+          school.innerHTML = '<option value="北京大学">北京大学</option><option value="北京大学">清华大学</option>';
+      }
+    },false)
+    })()
   </script>
 </body>
 
