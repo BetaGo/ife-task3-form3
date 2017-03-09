@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>任务三：表单（三）联动</title>
+  <style>
+    .hide {
+      opacity: 0;
+      display: none;
+    }
+
+    .form-box {
+      width: 1200px;
+      margin: 20px auto;
+      font-size: 28px;
+    }
+    
+    .switch-box {
+      width: 1000px;
+      margin: 0 0 90px 200px;
+    }
+    
+    .input-radio {
+      display: none;
+    }
+    
+    .input-label {
+      display: inline-block;
+      width: 500px;
+    }
+    
+    .input-label-select::before {
+      display: inline-block;
+      box-sizing: border-box;
+      content: '';
+      width: 28px;
+      height: 28px;
+      margin: 0 10px;
+      border: 9px solid #3699ff;
+      border-radius: 50%;
+    }
+    
+    .input-label-unselect::before {
+      display: inline-block;
+      box-sizing: border-box;
+      content: '';
+      width: 28px;
+      height: 28px;
+      margin: 0 10px;
+      border: 1px solid #aaa;
+      border-radius: 50%;
+    }
+    
+    .location-title {
+      display: inline-block;
+      box-sizing: border-box;
+      width: 200px;
+      padding-right: 40px;
+      font-size: 28px;
+      font-weight: bolder;
+      line-height: 70px;
+      text-align: right;
+    }
+
+    .select {
+      box-sizing: border-box;
+      height: 70px;
+      font-size: 28px;
+      line-height: 70px;
+      background: #fff;
+      border: 2px solid #dadada;
+      border-radius: 5px;
+      outline: none;
+    }
+    .select-city {
+      width: 350px;
+      margin-right: 85px;
+    }
+
+    .select-school {
+      width: 565px;
+    }
+
+    .input-text-box {
+      box-sizing: border-box;
+      width: 1000px;
+      height: 70px;
+      padding-left: 1em;
+      font-size: 28px;
+      line-height: 70px;
+      background: #fff;
+      border: 2px solid #dadada;
+      border-radius: 5px;
+      outline: none;
+    }
+
+  </style>
+</head>
+
+<body>
+  <form class="form-box" action="#">
+    <div class="switch-box">
+      <input type="radio" id="is_student" class="input-radio" name="isstudent" value="1" checked
+      ><label class="input-label input-label-select" for="is_student">在校生</label
+      ><input type="radio" id="not_student" class="input-radio" name="isstudent" value="0"
+      ><label class="input-label input-label-unselect" for="not_student">非在校生</label>
+    </div>
+    <div id="in_school">
+      <span class="location-title">学校</span
+      ><select name="city" id="city" class="select select-city">
+        <option value="北京">北京</option>
+        <option value="上海">上海</option>
+      </select
+      ><select name="school" id="school" class="select select-school">
+        <option value="北京大学">北京大学</option>
+      </select>
+    </div>
+    <div id="out_school" class="hide">
+      <span class="location-title">就业单位</span
+      ><input class="input-text-box" type="text">
+    </div>
+  </form>
+
+  <script>
+    var $ = function(selector,context) {
+      var context = context || document;
+      return context.querySelector(selector);
+    };
+
+    var isStudent = $('label[for="is_student"'),
+      notStudent = $('label[for="not_student"'),
+      inSchool = $('#in_school'),
+      outSchool = $('#out_school');
+
+
+    isStudent.addEventListener('click',function(){
+      notStudent.classList.add('input-label-unselect');
+      notStudent.classList.remove('input-label-select');
+      isStudent.classList.remove('input-label-unselect');
+      isStudent.classList.add('input-label-select');
+      inSchool.classList.remove('hide');
+      outSchool.classList.add('hide');
+    });
+
+    notStudent.addEventListener('click',function(){
+      isStudent.classList.add('input-label-unselect');
+      isStudent.classList.remove('input-label-select');
+      notStudent.classList.remove('input-label-unselect');
+      notStudent.classList.add('input-label-select');
+      outSchool.classList.remove('hide');
+      inSchool.classList.add('hide');
+    });
+
+  </script>
+</body>
+
+</html>
