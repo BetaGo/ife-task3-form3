@@ -7,11 +7,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>任务三：表单（三）联动</title>
   <style>
-    .hide {
-      opacity: 0;
-      display: none;
-    }
-
     .form-box {
       width: 1200px;
       margin: 20px auto;
@@ -103,24 +98,19 @@
 <body>
   <form class="form-box" action="#">
     <div class="switch-box">
-      <input type="radio" id="is_student" class="input-radio" name="isstudent" value="1" checked
+      <input type="radio" id="is_student" class="input-radio" name="isstudent" checked
       ><label class="input-label input-label-select" for="is_student">在校生</label
-      ><input type="radio" id="not_student" class="input-radio" name="isstudent" value="0"
+      ><input type="radio" id="not_student" class="input-radio" name="isstudent"
       ><label class="input-label input-label-unselect" for="not_student">非在校生</label>
     </div>
     <div id="in_school">
       <span class="location-title">学校</span
       ><select name="city" id="city" class="select select-city">
-        <option value="北京" selected >北京</option>
-        <option value="上海">上海</option>
-        <option value="河南">河南</option>
       </select
       ><select name="school" id="school" class="select select-school">
-        <option value="北京大学">北京大学</option>
-        <option value="北京大学">清华大学</option>
       </select>
     </div>
-    <div id="out_school" class="hide">
+    <div id="out_school" style="display: none">
       <span class="location-title">就业单位</span
       ><input class="input-text-box" type="text">
     </div>
@@ -129,49 +119,64 @@
   <script>
     (function() {
       var $ = function(selector,context) {
-      var context = context || document;
-      return context.querySelector(selector);
-    };
+        var context = context || document;
+        return context.querySelector(selector);
+      };
 
-    var isStudent = $('label[for="is_student"'),
-      notStudent = $('label[for="not_student"'),
-      inSchool = $('#in_school'),
-      outSchool = $('#out_school'),
-      city = $('#city'),
-      school = $('#school');
+      var isStudent = $('label[for="is_student"'), notStudent = $('label[for="not_student"'),
+        inSchool = $('#in_school'), outSchool = $('#out_school'),
+        city = $('#city'), school = $('#school');
 
-    // 在校生 与 非在校生切换
-    isStudent.addEventListener('click',function(){
-      notStudent.classList.add('input-label-unselect');
-      notStudent.classList.remove('input-label-select');
-      isStudent.classList.remove('input-label-unselect');
-      isStudent.classList.add('input-label-select');
-      inSchool.classList.remove('hide');
-      outSchool.classList.add('hide');
-    },false);
+      // 伪造的学校数据
+      var Data = {
+        上海: ['上海大学','复旦大学','同济大学'],
+        北京: ['北京大学','清华大学','中国人民大学','北京师范大学'],
+        河南: ['郑州大学','河南大学'],
+        海南: ['海南大学']
+      };
 
-    notStudent.addEventListener('click',function(){
-      isStudent.classList.add('input-label-unselect');
-      isStudent.classList.remove('input-label-select');
-      notStudent.classList.remove('input-label-unselect');
-      notStudent.classList.add('input-label-select');
-      outSchool.classList.remove('hide');
-      inSchool.classList.add('hide');
-    },false);
 
-    // 切换城市后 更换可选学校。
-    city.addEventListener('change',function(){
-      switch (city.value) {
-        case '上海':
-          school.innerHTML = '<option value="上海大学">上海大学</option><option value="上海交通大学">上海交通大学</option>';
-          break;
-        case '河南':
-          school.innerHTML = '<option value="郑州大学">郑州大学</option><option value="河南大学">河南大学</option>';
-          break;
-        default:
-          school.innerHTML = '<option value="北京大学">北京大学</option><option value="北京大学">清华大学</option>';
+      // 在校生 与 非在校生切换
+      isStudent.addEventListener('click',function(){
+        notStudent.className = 'input-label input-label-unselect';
+        isStudent.className = 'input-label input-label-select';
+        outSchool.style.display = 'none';
+        inSchool.style.display = 'block';
+      },false);
+
+      notStudent.addEventListener('click',function(){
+        notStudent.className = 'input-label input-label-select';
+        isStudent.className = 'input-label input-label-unselect';
+        outSchool.style.display = 'block';
+        inSchool.style.display = 'none';
+      },false);
+
+
+      // 初始化城市数据
+      (function initCity(data) {
+        var cityName = [];
+        for (var key in data) {
+          cityName.push(`<option value="${key}">${key}</option>`);
+        }
+        cityName = cityName.join('');
+        city.innerHTML = cityName;
+      })(Data);
+
+
+      // 更新学校数据
+      function updateSchool() {
+        var key = city.value, schoolsName = [],name;
+        for (var i = 0; i < Data[key].length; i++){
+          schoolsName.push(`<option value="${Data[key][i]}">${Data[key][i]}</option>`);
+        }
+        schoolsName = schoolsName.join('');
+        school.innerHTML = schoolsName;
       }
-    },false)
+      updateSchool();
+
+
+      // 切换城市后 更换可选学校。
+      city.addEventListener('change',updateSchool,false);
     })()
   </script>
 </body>
